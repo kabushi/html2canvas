@@ -958,14 +958,18 @@ _html2canvas.Parse = function (images, options, cb) {
 
     elps.className = pseudoHide + "-element ";
 
-    Object.keys(elStyle).filter(indexedProperty).forEach(function(prop) {
+    //Object.keys(elStyle).filter(indexedProperty).forEach(function(prop) {
+    for (var prop in elStyle) {
+      if (indexedProperty(prop) && prop !== 'cssText') {
       // Prevent assigning of read only CSS Rules, ex. length, parentRule
-      try {
-        elps.style[prop] = elStyle[prop];
-      } catch (e) {
-        Util.log(['Tried to assign readonly property ', prop, 'Error:', e]);
+        try {
+          elps.style[prop] = elStyle[prop];
+        } catch (e) {
+          Util.log(['Tried to assign readonly property ', prop, 'Error:', e]);
+        }
       }
-    });
+    }
+    //});
 
     if(isImage) {
       elps.src = Util.parseBackgroundImage(content)[0].args[0];
